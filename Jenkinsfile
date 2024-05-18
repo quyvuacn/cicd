@@ -2,10 +2,9 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone') {
+        stage('Test Jenkins') {
             steps {
-                echo 'Cloneing...'
-                sh 'git pull origin main'
+                sh 'ls'
             }
         }
     }
