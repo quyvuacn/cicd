@@ -1,0 +1,1 @@
+curl http://20.205.25.36:8080/job/cicd_example/build?token=quyvuacn_cicd_example
