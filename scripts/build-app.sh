@@ -15,8 +15,8 @@ docker login --username "$DOCKER_USERNAME"
 
 echo -e "[${GREEN}START${NONE}] Building....."
 
-docker build -f "$DOCKERFILE" -t ${DOCKER_USERNAME}/${DOCKER_REPO}:${DOCKER_TAG} .
+docker build -f "$DOCKERFILE" -t "${DOCKER_USERNAME}/${DOCKER_REPO}" .
 
-docker push ${DOCKER_USERNAME}/${DOCKER_REPO}:${DOCKER_TAG}
+docker push "${DOCKER_USERNAME}/${DOCKER_REPO}"
 
 echo -e "[${GREEN}DONE${NONE}] ${MODE} build and push successfully!"
