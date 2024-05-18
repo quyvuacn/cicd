@@ -22,6 +22,8 @@ const posts = [
     comments: [
       "This is the content of the third",
       "This is the content of the third",
+      "This is the content of the third",
+      "Vanh Nè",
     ],
   },
 ];

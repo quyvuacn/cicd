@@ -24,7 +24,7 @@ pipeline {
 
                     sh "docker stop ${DOCKER_REPO} || true"
                     sh "docker rm ${DOCKER_REPO} || true"
-                    sh "docker run -d --name ${DOCKER_REPO} -p 3000:3000 ${DOCKER_USERNAME}/${DOCKER_REPO}"
+                    sh "docker run -d --name ${DOCKER_REPO} -p 3000:3000 ${DOCKER_USERNAME}/${DOCKER_REPO}:${DOCKER_TAG}"
                 }
             }
         }
