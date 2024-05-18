@@ -3,24 +3,10 @@ pipeline {
 
     stages {
         stage('Clone') {
-
-        }
-
-
-        stage('Build') {
-
-        }
-
-        stage('Test') {
-
-        }
-
-        stage('Package') {
-
-        }
-
-        stage('Deploy') {
-
+            steps {
+                echo 'Cloneing...'
+                sh 'git pull origin main'
+            }
         }
     }
 }
