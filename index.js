@@ -19,6 +19,10 @@ const posts = [
     id: 3,
     title: "Third Post",
     content: "This is the content of the third post.",
+    comments: [
+      "This is the content of the third",
+      "This is the content of the third",
+    ],
   },
 ];
 
