@@ -24,6 +24,7 @@ const posts = [
       "This is the content of the third",
       "This is the content of the third",
       "Vanh Nè",
+      "Vanh Nè 123",
     ],
   },
 ];

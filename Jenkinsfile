@@ -18,6 +18,7 @@ pipeline {
         stage('Package and Build') {
             steps {
                 withDockerRegistry(credentialsId: 'credential_dockerhub', url: 'https://index.docker.io/v1/') {
+                    sh "docker rmi ${DOCKER_USERNAME}/${DOCKER_REPO}:${DOCKER_TAG}"
                     sh 'docker build -f "$DOCKERFILE" -t ${DOCKER_USERNAME}/${DOCKER_REPO}:${DOCKER_TAG} .'
                     sh 'docker push ${DOCKER_USERNAME}/${DOCKER_REPO}:${DOCKER_TAG}'
 
