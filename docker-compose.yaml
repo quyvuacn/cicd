@@ -27,7 +27,7 @@ services:
       - /usr/local/bin/docker-compose:/usr/local/bin/docker-compose
 
   nginx:
-    build: /nginx/.
+    build: ./nginx/.
     ports:
       - "80:80"
 
