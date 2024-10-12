@@ -1,7 +1,8 @@
 #!/bin/bash
 active_color=$1
-tem_path="../conf.d.tem/fe.conf"
-path="../conf.d/fe.conf"
+target_file=$2
+tem_path="../nginx/conf.d.tem/$target_file"
+docker_conf_path="../nginx/conf.d/$target_file"
 
 echo "$active_color"
 
@@ -11,6 +12,6 @@ else
     switch_color="blue"
 fi
 
-conf=$(sed "s|\$current_color|$switch_color|g" "$tem_path")
+conf=$(sed "s|\$active_color|$switch_color|g" "$tem_path")
 
-echo "$conf" > "$path"
+echo "$conf" > "$docker_conf_path"

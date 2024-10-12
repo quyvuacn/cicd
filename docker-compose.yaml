@@ -30,6 +30,21 @@ services:
     build: ./nginx/.
     ports:
       - "80:80"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  app-blue:
+    build: ./app
+    ports:
+      - "81:80"
+
+  app-green:
+    build: ./app
+    ports:
+      - "82:80"
 
 volumes:
   consul_data:
