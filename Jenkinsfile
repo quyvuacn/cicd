@@ -36,7 +36,7 @@ pipeline {
                     echo "Building and running service: ${service}"
 
                     sh """
-                        docker-compose up -d --build  ${service}
+                        docker compose up -d --build  ${service}
                     """
                 }
             }
