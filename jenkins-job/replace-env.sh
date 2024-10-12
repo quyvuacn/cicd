@@ -17,4 +17,4 @@ conf=$(sed "s|\$active_color|$switch_color|g" "$tem_path")
 container_id=$(docker ps -qf "name=nginx")
 echo "$conf" | docker exec -i "$container_id" bash -c "cat > $docker_conf_path"
 
-docker exec "$container_id" nginx -s reload
+# docker exec "$container_id" nginx -s reload
