@@ -1,8 +1,8 @@
 #!/bin/bash
 active_color=$1
 target_file=$2
-tem_path="../nginx/conf.d.tem/$target_file"
-docker_conf_path="../nginx/conf.d/$target_file"
+tem_path="../conf.d.tem/$target_file"
+docker_conf_path="etc/nginx/conf.d/$target_file"
 
 echo "$active_color"
 
@@ -14,4 +14,7 @@ fi
 
 conf=$(sed "s|\$active_color|$switch_color|g" "$tem_path")
 
-echo "$conf" > "$docker_conf_path"
+container_id=$(docker ps -qf "name=nginx")
+echo "$conf" | docker exec -i "$container_id" bash -c "cat > $docker_conf_path"
+
+docker exec "$container_id" nginx -s reload
