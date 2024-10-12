@@ -15,11 +15,13 @@ pipeline {
         }
 
         stage('Get Current Color') {
-            def consulToken = credentials('consul_master_token')
-            def activeColor = sh(script: "consul kv get -token ${consulToken} active_color", returnStdout: true).trim()
-            echo "Current active color: ${activeColor}"
+            steps {
+                def consulToken = credentials('consul_master_token')
+                def activeColor = sh(script: "consul kv get -token ${consulToken} active_color", returnStdout: true).trim()
+                echo "Current active color: ${activeColor}"
 
-            env.CURRENT_COLOR = activeColor
+                env.CURRENT_COLOR = activeColor
+            }
         }
     }
 
