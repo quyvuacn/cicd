@@ -2,6 +2,7 @@ version: '3.8'
 services:
   consul:
     image: hashicorp/consul:latest
+    container_name: consul
     ports:
       - "8500:8500"
       - "8600:8600/udp"
@@ -36,15 +37,11 @@ services:
       timeout: 10s
       retries: 3
 
-  app-blue:
+  web_app_blue:
     build: ./app
-    ports:
-      - "81:80"
 
-  app-green:
+  web_app_green:
     build: ./app
-    ports:
-      - "82:80"
 
 volumes:
   consul_data:
