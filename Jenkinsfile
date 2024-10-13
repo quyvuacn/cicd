@@ -31,16 +31,16 @@ pipeline {
             steps {
                 script {
                     env.NEXT_COLOR = env.CURRENT_COLOR == "blue" ? "green" : "blue"
-                    env.OLD_IMAGE = "${env.BASE_IMAGE_NAME}_${env.CURRENT_COLOR}"
                     env.NEW_IMAGE = "${env.BASE_IMAGE_NAME}_${env.NEXT_COLOR}"
 
-                    echo "Next color will be: ${env.NEXT_COLOR}"
                     echo "Building and running image: ${env.NEW_IMAGE}"
 
                     sh """
-                    docker-compose stop ${env.NEW_IMAGE} || true
-                    docker-compose rm -f ${env.NEW_IMAGE}
-                    docker-compose up -d --build ${env.NEW_IMAGE}
+                        if docker-compose ps | grep -q "${env.NEW_IMAGE}"; then
+                            docker-compose stop ${env.NEW_IMAGE}
+                        fi
+                        docker-compose rmi -f ${env.NEW_IMAGE}
+                        docker-compose up -d --build ${env.NEW_IMAGE}
                     """
                 }
             }
@@ -52,11 +52,10 @@ pipeline {
                     sh "chmod +x ./jenkins-jobs/health-check.sh"
                     def checkResult = sh(script: "./jenkins-jobs/health-check.sh http://${env.BASE_IMAGE_NAME}_${env.NEXT_COLOR} 2", returnStdout: true).trim()
 
-                    if (checkResult == "OK") {
-                        echo "http://${env.BASE_IMAGE_NAME}_${env.NEXT_COLOR} is healthy!"
-                    } else {
+                    if (checkResult != "OK") {
                         error "http://${env.BASE_IMAGE_NAME}_${env.NEXT_COLOR} is unhealthy!"
                     }
+                    echo "http://${env.BASE_IMAGE_NAME}_${env.NEXT_COLOR} is healthy!"
                 }
             }
         }
@@ -85,20 +84,16 @@ pipeline {
     post {
         success {
             script {
-                sh "docker-compose stop ${env.OLD_IMAGE} || true"
+                sh "docker-compose stop ${env.BASE_IMAGE_NAME}_${env.CURRENT_COLOR} || true"
                 echo 'Deployment successful!'
             }
         }
         failure {
             echo 'Deployment failed!'
-
             script {
                 withCredentials([string(credentialsId: 'consul_master_token', variable: 'token')]) {
-                    sh(script: "curl -X PUT -H 'X-Consul-Token: ${token}' -d '${env.CURRENT_COLOR}' '${env.CONSUL_URL}/current_color'")
+                    sh "curl -X PUT -H 'X-Consul-Token: ${token}' -d '${env.CURRENT_COLOR}' '${env.CONSUL_URL}/current_color'"
                 }
-
-                sh "docker-compose stop ${env.NEXT_COLOR} || true"
-                sh "docker start ${env.OLD_IMAGE}"
             }
         }
     }
