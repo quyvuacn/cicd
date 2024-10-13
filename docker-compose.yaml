@@ -1,48 +1,9 @@
 version: '3.8'
 services:
-  consul:
-    image: hashicorp/consul:latest
-    container_name: consul
-    ports:
-      - "8500:8500"
-      - "8600:8600/udp"
-    command: >
-      agent -server -ui
-      -node=server-1
-      -bootstrap-expect=1
-      -client=0.0.0.0
-      -config-file=/config/consul-acl.json
-    volumes:
-      - ./config:/config
-      - consul_data:/consul/data
-
-  jenkins:
-    image: jenkins/jenkins:lts
-    ports:
-      - "8080:8080"
-      - "50000:50000"
-    volumes:
-      - jenkins_home:/var/jenkins_home
-      - /usr/bin/docker:/usr/bin/docker
-      - /usr/local/bin/docker-compose:/usr/local/bin/docker-compose
-      - /var/run/docker.sock:/var/run/docker.sock
-
-  nginx:
-    build: ./nginx/.
-    ports:
-      - "80:80"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
   web_app_blue:
-    image: web_app_blue
     build: ./app
 
   web_app_green:
-    image: web_app_blue
     build: ./app
 
 volumes:
