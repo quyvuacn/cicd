@@ -20,7 +20,7 @@ pipeline {
                 script {
                     withCredentials([string(credentialsId: 'consul_master_token', variable: 'token')]) {
                         def currentColor = sh(script: "curl -H 'X-Consul-Token: ${token}' '${env.CONSUL_URL}/current_color?raw'", returnStdout: true).trim().replaceAll('"', '')
-                        env.CURRENT_COLOR = currentColor || "blue"
+                        env.CURRENT_COLOR = currentColor ?: "blue"
                     }
                     echo "Current color is ${env.CURRENT_COLOR}"
                 }
