@@ -47,6 +47,7 @@ pipeline {
         stage('Check Health') {
             steps {
                 script {
+                    sh "chmod +x ./jenkins-jobs/health-check.sh"
                     def checkResult = sh(script: "./jenkins-jobs/health-check.sh http://${env.BASE_SERVICE_NAME}_${env.NEXT_COLOR} 2", returnStdout: true).trim()
 
                     if (checkResult == "OK") {
@@ -66,6 +67,17 @@ pipeline {
                     sh "chmod +x ./jenkins-jobs/replace-env.sh"
                     sh "./jenkins-jobs/replace-env.sh ${env.CURRENT_COLOR} ${env.TARGET_CONF_FILE}"
                     sh "docker-compose stop ${oldService} || true"
+                }
+            }
+        }
+
+        stage('Update Config') {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'consul_master_token', variable: 'token')]) {
+                        def putResult = sh(script: "curl -X PUT -H 'X-Consul-Token: ${token}' -d '${env.NEXT_COLOR}' '${env.CONSUL_URL}/current_color'", returnStdout: true).trim()
+                        echo "Update result: ${putResult}"
+                    }
                 }
             }
         }
