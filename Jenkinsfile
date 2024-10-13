@@ -45,7 +45,7 @@ pipeline {
                     echo "Building and running service: ${service}"
 
                     sh """
-                        docker stop cicd-web_app_blue-1
+                        docker-compose up -d --build web_app_green
                     """
                 }
             }

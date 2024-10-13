@@ -38,9 +38,11 @@ services:
       retries: 3
 
   web_app_blue:
+    image: web_app_blue
     build: ./app
 
   web_app_green:
+    image: web_app_blue
     build: ./app
 
 volumes:
