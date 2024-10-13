@@ -30,9 +30,9 @@ pipeline {
         stage('Build and Run new Image') {
             steps {
                 script {
-                    def nextColor = env.CURRENT_COLOR == 'blue' ? 'green' : 'blue'
-                    def service = "${env.BASE_SERVICE_NAME}_${nextColor}"
-                    echo "Next color will be: ${nextColor}"
+                    env.NEXT_COLOR = env.CURRENT_COLOR == 'blue' ? 'green' : 'blue'
+                    def service = "${env.BASE_SERVICE_NAME}_${v}"
+                    echo "Next color will be: ${env.NEXT_COLOR}"
                     echo "Building and running service: ${service}"
 
                     sh """
@@ -44,7 +44,7 @@ pipeline {
 
         stage('Switching to new color') {
             steps {
-                sh './jenkins-jobs/replace-env.sh'
+               sh "./jenkins-jobs/replace-env.sh ${env.NEXT_COLOR} ${env.TARGET_CONF_FILE}"
             }
         }
     }
