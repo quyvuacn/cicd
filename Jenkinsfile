@@ -4,6 +4,7 @@ pipeline {
     environment {
         BASE_SERVICE_NAME="web_app"
         CURRENT_COLOR = "blue"
+        NEXT_COLOR = "green"
         CONSUL_URL = "http://consul:8500/v1/kv"
         TARGET_CONF_FILE = 'fe.conf'
         CONFIG_PATH = '/path/to/conf.d'
@@ -31,7 +32,7 @@ pipeline {
             steps {
                 script {
                     env.NEXT_COLOR = env.CURRENT_COLOR == 'blue' ? 'green' : 'blue'
-                    def service = "${env.BASE_SERVICE_NAME}_${v}"
+                    def service = "${env.BASE_SERVICE_NAME}_${NEXT_COLOR}"
                     echo "Next color will be: ${env.NEXT_COLOR}"
                     echo "Building and running service: ${service}"
 
@@ -44,7 +45,10 @@ pipeline {
 
         stage('Switching to new color') {
             steps {
-               sh "./jenkins-jobs/replace-env.sh ${env.NEXT_COLOR} ${env.TARGET_CONF_FILE}"
+                script {
+                    sh "chmod +x ./jenkins-jobs/replace-env.sh"
+                    sh "./jenkins-jobs/replace-env.sh ${env.NEXT_COLOR} ${env.TARGET_CONF_FILE}"
+                }
             }
         }
     }

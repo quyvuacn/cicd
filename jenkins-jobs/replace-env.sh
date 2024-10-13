@@ -1,7 +1,7 @@
 #!/bin/bash
 active_color=$1
 target_file=$2
-tem_path="../conf.d.tem/$target_file"
+tem_path="./conf.d.tem/$target_file"
 docker_conf_path="etc/nginx/conf.d/$target_file"
 
 if [ "$active_color" == "blue" ]; then
