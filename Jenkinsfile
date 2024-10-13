@@ -11,8 +11,12 @@ pipeline {
 
     stages {
         stage('Tooling versions') {
-            docker -v
-            docker ps -v
+            steps {
+                sh """
+                    docker -v
+                    docker ps -v
+                """
+            }
         }
 
         stage('Clone Repository') {
