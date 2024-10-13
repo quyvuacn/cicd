@@ -14,7 +14,7 @@ pipeline {
             steps {
                 sh """
                     docker -v
-                    docker ps -v
+                    docker compose -v
                 """
             }
         }
