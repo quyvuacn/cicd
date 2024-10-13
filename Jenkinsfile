@@ -10,6 +10,11 @@ pipeline {
     }
 
     stages {
+        stage('Tooling versions') {
+            docker -v
+            docker ps -v
+        }
+
         stage('Clone Repository') {
             steps {
                 git branch: 'main', url: 'https://github.com/quyvuacn/cicd.git'
@@ -27,20 +32,20 @@ pipeline {
             }
         }
 
-        stage('Build and Run new Image') {
-            steps {
-                script {
-                    def nextColor = env.CURRENT_COLOR == 'blue' ? 'green' : 'blue'
-                    def service = "${env.BASE_SERVICE_NAME}_${nextColor}"
-                    echo "Next color will be: ${nextColor}"
-                    echo "Building and running service: ${service}"
+        // stage('Build and Run new Image') {
+        //     steps {
+        //         script {
+        //             def nextColor = env.CURRENT_COLOR == 'blue' ? 'green' : 'blue'
+        //             def service = "${env.BASE_SERVICE_NAME}_${nextColor}"
+        //             echo "Next color will be: ${nextColor}"
+        //             echo "Building and running service: ${service}"
 
-                    sh """
-                        docker compose up -d --build  ${service}
-                    """
-                }
-            }
-        }
+        //             sh """
+        //                 docker compose up -d --build ${service}
+        //             """
+        //         }
+        //     }
+        // }
     }
 
     post {
