@@ -47,7 +47,7 @@ pipeline {
             steps {
                 script {
                     sh "chmod +x ./jenkins-jobs/replace-env.sh"
-                    sh "./jenkins-jobs/replace-env.sh ${env.NEXT_COLOR} ${env.TARGET_CONF_FILE}"
+                    sh "./jenkins-jobs/replace-env.sh ${env.CURRENT_COLOR} ${env.TARGET_CONF_FILE}"
                 }
             }
         }
