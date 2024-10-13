@@ -11,7 +11,7 @@ services:
       -node=server-1
       -bootstrap-expect=1
       -client=0.0.0.0
-      -config-file=/consul-acl.json
+      -config-file=/config/consul-acl.json
     volumes:
       - ./config:/config
       - consul_data:/consul/data
@@ -36,4 +36,6 @@ services:
 
 volumes:
   consul_data:
+    name: consul_data
   jenkins_home:
+    name: jenkins_home
