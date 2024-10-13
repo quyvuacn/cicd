@@ -31,15 +31,29 @@ pipeline {
             steps {
                 script {
                     echo "Current color is ${env.CURRENT_COLOR}"
-                    def nextColor = env.CURRENT_COLOR == "blue" ? "green" : "blue"
-                    def service = "${env.BASE_SERVICE_NAME}_${nextColor}"
-                    echo "Next color will be: ${nextColor}"
+                    env.NEXT_COLOR = env.CURRENT_COLOR == "blue" ? "green" : "blue"
+                    def service = "${env.BASE_SERVICE_NAME}_${env.NEXT_COLOR}"
+                    echo "Next color will be: ${env.NEXT_COLOR}"
                     echo "Building and running service: ${service}"
 
-                    sh"""
-                    docker-compose stop ${service}
+                    sh """
+                    docker-compose stop ${service} || true
                     docker-compose up -d --build ${service}
                     """
+                }
+            }
+        }
+
+        stage('Check Health') {
+            steps {
+                script {
+                    def checkResult = sh(script: "./jenkins-jobs/health-check.sh http://${env.BASE_SERVICE_NAME}_${env.NEXT_COLOR} 2", returnStdout: true).trim()
+
+                    if (checkResult == "OK") {
+                        echo "Service is healthy!"
+                    } else {
+                        error "Service is unhealthy!"
+                    }
                 }
             }
         }
@@ -47,8 +61,11 @@ pipeline {
         stage('Switching to new color') {
             steps {
                 script {
+                    def oldService = "${env.BASE_SERVICE_NAME}_${env.CURRENT_COLOR}"
+
                     sh "chmod +x ./jenkins-jobs/replace-env.sh"
                     sh "./jenkins-jobs/replace-env.sh ${env.CURRENT_COLOR} ${env.TARGET_CONF_FILE}"
+                    sh "docker-compose stop ${oldService} || true"
                 }
             }
         }
