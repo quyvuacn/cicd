@@ -93,7 +93,7 @@ pipeline {
 
             script {
                 sh "docker-compose stop ${env.NEXT_COLOR} || true"
-                sh "docker-compose up -d --build ${env.OLD_IMAGE}"
+                sh "docker start ${env.OLD_IMAGE}"
 
                 withCredentials([string(credentialsId: 'consul_master_token', variable: 'token')]) {
                     sh(script: "curl -X PUT -H 'X-Consul-Token: ${token}' -d '${env.CURRENT_COLOR}' '${env.CONSUL_URL}/current_color'")
