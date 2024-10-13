@@ -40,7 +40,7 @@ pipeline {
                             docker-compose stop ${env.NEW_IMAGE}
                         fi
                         docker rmi -f ${env.NEW_IMAGE}
-                        docker-compose up -d --build ${env.NEW_IMAGE}
+                        docker-compose up -d ${env.NEW_IMAGE}
                     """
                 }
             }
