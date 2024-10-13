@@ -21,7 +21,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([string(credentialsId: 'consul_master_token', variable: 'token')]) {
-                        def result = sh(script: "curl -H 'X-Consul-Token: ${token}' '${env.CONSUL_URL}/curent_color?raw'", returnStdout: true).trim()
+                        def result = sh(script: "curl -H 'X-Consul-Token: ${token}' '${env.CONSUL_URL}/current_color?raw'", returnStdout: true).trim()
                         echo "Curent color is ${result}"
                         env.CURRENT_COLOR = result
                     }
