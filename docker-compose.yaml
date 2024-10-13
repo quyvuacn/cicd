@@ -5,7 +5,3 @@ services:
 
   web_app_green:
     build: ./app
-
-volumes:
-  consul_data:
-  jenkins_home:
