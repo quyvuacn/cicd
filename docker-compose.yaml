@@ -3,7 +3,15 @@ services:
   web_app_blue:
     build: ./app
     container_name: web_app_blue
+    networks:
+      - cicd
 
   web_app_green:
     build: ./app
     container_name: web_app_green
+    networks:
+      - cicd
+
+networks:
+  cicd:
+    external: true
