@@ -10,15 +10,6 @@ pipeline {
     }
 
     stages {
-        stage('Tooling versions') {
-            steps {
-                sh """
-                    docker -v
-                    docker compose -v
-                """
-            }
-        }
-
         stage('Clone Repository') {
             steps {
                 git branch: 'main', url: 'https://github.com/quyvuacn/cicd.git'
@@ -48,6 +39,12 @@ pipeline {
                         docker-compose up -d --build web_app_green
                     """
                 }
+            }
+        }
+
+        stage('Switching to new color') {
+            steps {
+                sh './jenkins-jobs/replace-env.sh'
             }
         }
     }
