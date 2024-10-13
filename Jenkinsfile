@@ -39,6 +39,7 @@ pipeline {
 
                     sh """
                     docker-compose stop ${env.NEW_IMAGE} || true
+                    docker-compose rm -f ${env.NEW_IMAGE}
                     docker-compose up -d --build ${env.NEW_IMAGE}
                     """
                 }
