@@ -24,8 +24,8 @@ services:
     volumes:
       - jenkins_home:/var/jenkins_home
       - /usr/bin/docker:/usr/bin/docker
+      - /usr/bin/compose:/usr/bin/compose
       - /var/run/docker.sock:/var/run/docker.sock
-      - /usr/local/bin/docker-compose:/usr/local/bin/docker-compose
 
   nginx:
     build: ./nginx/.
