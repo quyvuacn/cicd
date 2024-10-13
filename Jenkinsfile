@@ -39,7 +39,7 @@ pipeline {
                         if docker-compose ps | grep -q "${env.NEW_IMAGE}"; then
                             docker-compose stop ${env.NEW_IMAGE}
                         fi
-                        docker-compose rmi -f ${env.NEW_IMAGE}
+                        docker rmi -f ${env.NEW_IMAGE}
                         docker-compose up -d --build ${env.NEW_IMAGE}
                     """
                 }
